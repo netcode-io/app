@@ -3,12 +3,13 @@
 
 // ── Tailwind foundation ─────────────────────────────────────────────
 // Platform / keyboard variants mirror the SCSS mixins in src/mixins.scss so
-// `ios:`, `android:`, `browser:`, `kbd:` (+ composites) are usable as idiomatic
+// `ios:`, `android:`, `browser:`, `electron:`, `kbd:` (+ composites) are usable as idiomatic
 // Tailwind variants during the SCSS→Tailwind migration. `md:` (768px) and `lg:`
 // (1024px) already cover the old `tablet`/`desktop` mixins.
 @custom-variant ios (body[platform="ios"] &);
 @custom-variant android (body[platform="android"] &);
 @custom-variant browser (body[platform="browser"] &);
+@custom-variant electron (body[platform="desktop"] &);
 @custom-variant kbd (body.keyboard-visible &);
 @custom-variant ios-kbd (body[platform="ios"].keyboard-visible &);
 @custom-variant android-kbd (body[platform="android"].keyboard-visible &);

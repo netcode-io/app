@@ -157,8 +157,13 @@ async function load() {
 
 		const versionCode = Number.parseInt(platform.versionCode, 10);
 		if (versionCode > Number.parseInt(process.env.VERSION_CODE, 10)) {
+			const storeName = process.env.IS_IOS
+				? "the App Store"
+				: process.env.IS_DESKTOP
+					? "shellular.dev"
+					: "the Play Store";
 			const confirmation = await dialog.confirm(
-				`New version ${platform.version} available on ${process.env.IS_IOS ? "App Store" : "Play Store"}, update?`,
+				`New version ${platform.version} available on ${storeName}, update?`,
 				"New version available",
 			);
 

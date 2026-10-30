@@ -46,6 +46,10 @@
       @include browser {
         margin-left: var(--sidebar-w);
       }
+
+      @include electron {
+        margin-left: var(--sidebar-w);
+      }
     }
   }
 
@@ -92,6 +96,11 @@
       }
 
       @include browser {
+        width: var(--sidebar-w);
+        padding: 32px 0;
+      }
+
+      @include electron {
         width: var(--sidebar-w);
         padding: 32px 0;
       }

@@ -1,6 +1,6 @@
 # Shellular
 
-Use your dev machine from your phone. Connect to your Mac, PC, or VPS and ship from anywhere. Terminal, file editor, Git, AI agents, and system monitoring — all on mobile.
+Use your dev machine from your phone or desktop. Connect to your Mac, PC, or VPS and ship from anywhere. Terminal, file editor, Git, AI agents, and system monitoring — on mobile and on Windows and macOS.
 
 ## Features
 
@@ -23,6 +23,7 @@ Use your dev machine from your phone. Connect to your Mac, PC, or VPS and ship f
 - Platform SDKs (for native builds):
   - Android: JDK 17+, Android SDK
   - iOS: Xcode 16+, CocoaPods
+  - Desktop: no extra SDK. `pnpm dev desktop` downloads Electron and opens a Windows or macOS window.
 
 ## Quick Start
 
@@ -37,6 +38,7 @@ pnpm dev
 pnpm dev android
 pnpm dev ios
 pnpm dev browser
+pnpm dev desktop
 ```
 
 This starts webpack-dev-server with HMR and launches the app on the target platform.
@@ -54,7 +56,10 @@ Successful app joins are shown as read-only host and device history from the Acc
 pnpm build android
 pnpm build ios
 pnpm build browser
+pnpm build desktop
 ```
+
+`pnpm build desktop` packages the app for the computer you are on: an NSIS installer and zip on Windows, a dmg and zip on macOS. Pass `-- --win` or `-- --mac` to ask for one target. Installers are written to `platforms/desktop/dist`. A dev session registers the `shellular-dev://` sign-in callback for that build; the packaged app registers `shellular://`.
 
 ### iOS code signing
 

@@ -31,7 +31,7 @@ src/
   tabs/                # Bottom-tab views: home, terminal, projects, agents, more
   state/               # React context + useSyncExternalStore state management
   lib/                 # Utilities: settings, store, e2ee, keyboard, permissions
-  platforms/           # Platform-specific bootstrapping (android/ios/browser)
+  platforms/           # Platform-specific bootstrapping (android/ios/browser/desktop)
   lang/                # Internationalization (English only currently)
   themes/              # Theme definitions (light, dark, oled)
   listeners/           # Global event listeners (intents, external links)

@@ -1,4 +1,4 @@
-type PLATFORM = "android" | "browser" | "ios";
+type PLATFORM = "android" | "browser" | "ios" | "desktop";
 
 interface Bridge {
 	exec(
@@ -17,6 +17,7 @@ declare namespace NodeJS {
 			IS_IOS: boolean;
 			IS_ANDROID: boolean;
 			IS_BROWSER: boolean;
+			IS_DESKTOP: boolean;
 			DEV_MODE: boolean;
 			PLATFORM: PLATFORM;
 			VERSION: string;
@@ -29,9 +30,29 @@ declare namespace NodeJS {
 	}
 }
 
+interface DesktopBridge {
+	exec(payload: {
+		id: number;
+		service: string;
+		action: string;
+		args: unknown[];
+	}): void;
+	onCallback(
+		handler: (data: {
+			id: number;
+			keep?: boolean;
+			success?: unknown;
+			error?: unknown;
+			isBinary?: boolean;
+			length?: number;
+		}) => void,
+	): void;
+}
+
 interface Window {
 	iOS: iOSBridge;
 	Android: AndroidBridge;
+	desktop: DesktopBridge;
 	Bridge: Bridge;
 	webkitAudioContext?: typeof AudioContext;
 	Buffer?: typeof import("buffer").Buffer;
@@ -110,6 +131,7 @@ declare var navigator: NavigatorWithExtensions;
 
 interface WindowWithExtensions extends Window {
 	Bridge: Bridge;
+	desktop: DesktopBridge;
 	Android: AndroidBridge;
 	webkit: { messageHandlers: WebKitMessageHandlers };
 	iOS: iOSBridge;

@@ -1,0 +1,37 @@
+appId: io.foxbiz.shellular
+productName: Shellular
+copyright: Copyright © Shellular
+npmRebuild: false
+asar: true
+directories:
+  output: platforms/desktop/dist
+files:
+  - platforms/desktop/**/*
+  - src/res/logo.png
+  - package.json
+  - "!platforms/desktop/dist/**"
+  - "!platforms/desktop/bundle/**"
+  - "!node_modules/**"
+extraResources:
+  - from: platforms/desktop/bundle
+    to: bundle
+extraMetadata:
+  main: platforms/desktop/main.cjs
+protocols:
+  - name: Shellular
+    schemes:
+      - shellular
+win:
+  target:
+    - nsis
+    - zip
+  icon: src/res/logo.png
+mac:
+  target:
+    - dmg
+    - zip
+  category: public.app-category.developer-tools
+  icon: src/res/logo.png
+  extendInfo:
+    NSCameraUsageDescription: Shellular uses the camera to scan pairing QR codes.
+  identity: null

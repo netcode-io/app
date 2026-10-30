@@ -13,8 +13,10 @@ import packageJson from "./package.json" with { type: "json" };
 const PLATFORMS = join(process.cwd(), "platforms");
 const ANDROID_BUNDLE = join(PLATFORMS, "android/app/src/main/assets/bundle");
 const BROWSER_BUNDLE = join(PLATFORMS, "browser/bundle");
+const DESKTOP_BUNDLE = join(PLATFORMS, "desktop/bundle");
 const IOS_BUNDLE = join(PLATFORMS, "ios/shellular/bundle");
-const MIXINS = `@use "${join(process.cwd(), "src/mixins.scss")}" as *;`;
+const mixinPath = join(process.cwd(), "src/mixins.scss").replaceAll("\\", "/");
+const MIXINS = `@use "${mixinPath}" as *;`;
 
 if (!existsSync(ANDROID_BUNDLE)) {
 	mkdirSync(ANDROID_BUNDLE, { recursive: true });
@@ -26,6 +28,10 @@ if (!existsSync(BROWSER_BUNDLE)) {
 
 if (!existsSync(IOS_BUNDLE)) {
 	mkdirSync(IOS_BUNDLE, { recursive: true });
+}
+
+if (!existsSync(DESKTOP_BUNDLE)) {
+	mkdirSync(DESKTOP_BUNDLE, { recursive: true });
 }
 
 export default (_, { env = {}, mode = "development" }) => {
@@ -47,7 +53,9 @@ export default (_, { env = {}, mode = "development" }) => {
 			? BROWSER_BUNDLE
 			: platform === "ios"
 				? IOS_BUNDLE
-				: ANDROID_BUNDLE;
+				: platform === "desktop"
+					? DESKTOP_BUNDLE
+					: ANDROID_BUNDLE;
 
 	let alias;
 	if (isDev) {
@@ -262,6 +270,7 @@ export default (_, { env = {}, mode = "development" }) => {
 				IS_IOS: platform === "ios",
 				IS_BROWSER: platform === "browser",
 				IS_ANDROID: platform === "android",
+				IS_DESKTOP: platform === "desktop",
 				VERSION_CODE: packageJson.versionCode,
 				DISPLAY_NAME: packageJson.displayName,
 				HOST: isDev && host ? host : null,

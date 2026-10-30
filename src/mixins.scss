@@ -46,6 +46,12 @@
   }
 }
 
+@mixin electron {
+  body[platform="desktop"] & {
+    @content;
+  }
+}
+
 @mixin browser-keyboard-visible {
   body[platform="browser"].keyboard-visible & {
     @content;

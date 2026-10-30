@@ -713,7 +713,11 @@ async function getAuthCallbackScheme(): Promise<string> {
 	// Android and iOS both ship dev builds under a `.dev` bundle id so they can
 	// sit alongside the store build; those register `shellular-dev` instead of
 	// `shellular` so the OS routes the auth callback to the right app.
-	if (process.env.PLATFORM !== "android" && process.env.PLATFORM !== "ios") {
+	if (
+		process.env.PLATFORM !== "android" &&
+		process.env.PLATFORM !== "ios" &&
+		process.env.PLATFORM !== "desktop"
+	) {
 		return "shellular";
 	}
 

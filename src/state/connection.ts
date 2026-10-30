@@ -333,7 +333,7 @@ export class Connection extends EventTarget {
 				hostId,
 				clientId,
 				appVersion,
-				platform: process.env.PLATFORM,
+				platform: clientPlatform(),
 				deviceModel: deviceInfo.model,
 				deviceIsEmulator: deviceInfo.isEmulator,
 				deviceManufacturer: deviceInfo.manufacturer,
@@ -1193,6 +1193,12 @@ function isHttp4xxError(err: unknown): boolean {
  * - Whichever server responds successfully is remembered per-hostId so the
  *   next connection attempt for this host goes straight to it.
  */
+/** Protocol 0.0.33 names android, browser, ios, and macos. Desktop reports macos. */
+function clientPlatform(): ClientInfo["platform"] {
+	if (process.env.PLATFORM === "desktop") return "macos";
+	return process.env.PLATFORM;
+}
+
 async function resolveWebSocketToken(
 	hostId: string,
 	accessToken: string | null,

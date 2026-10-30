@@ -1,6 +1,9 @@
 allowBuilds:
   '@parcel/watcher': true
+  app-builder-bin: true
   core-js: true
   core-js-pure: true
+  electron: true
+  electron-winstaller: true
 minimumReleaseAgeExclude:
   - '@shellular/protocol'

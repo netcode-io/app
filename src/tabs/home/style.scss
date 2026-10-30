@@ -62,6 +62,10 @@
       padding-top: 32px;
     }
 
+    @include electron {
+      padding-top: 32px;
+    }
+
     .home-hero-brand {
       display: flex;
       align-items: center;

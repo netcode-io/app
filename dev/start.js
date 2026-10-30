@@ -4,7 +4,7 @@ import config from "./config.js";
 import getIp from "./getIp.js";
 
 const args = process.argv.slice(2);
-const platform = args.find((arg) => /(android|ios|browser)/i.test(arg)) || "android";
+const platform = args.find((arg) => /(android|ios|browser|desktop)/i.test(arg)) || "android";
 const isRelease = args.includes("--release") || args.includes("-r") || false;
 const noServer = args.includes("--no-server");
 // Bind and serve overrides, needed whenever the dev server is not reached over
@@ -45,7 +45,7 @@ async function main() {
   } else if (noServer) {
     command = `webpack --mode development --env platform=${platform}`;
   } else {
-    const host = hostOverride || getIp();
+    const host = hostOverride || (platform === "desktop" ? "localhost" : getIp());
     const port = portOverride || getPort();
     const protocol = platform === "browser" && !noHttps ? "https" : "http";
     devServer = { host, port, protocol, headless };
@@ -78,7 +78,7 @@ async function main() {
     // bundle with the current port is on disk before installing the APK.
     // For one-shot builds, also wait for a real compile before starting.
     // For browser dev server, any output is fine because the browser can wait.
-    const needsBundle = platform === "android" || platform === "ios" || buildsOnce;
+    const needsBundle = platform === "android" || platform === "ios" || platform === "desktop" || buildsOnce;
     if (needsBundle && !chunk.includes("compiled successfully")) {
       return;
     }
@@ -158,6 +158,10 @@ function getArgValue(flag) {
 function getPort() {
   if (platform === "browser") {
     return 7977;
+  }
+
+  if (platform === "desktop") {
+    return 7978;
   }
 
   return Math.floor(Math.random() * (8000 - 3000 + 1)) + 3000;

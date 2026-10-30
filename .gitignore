@@ -29,6 +29,8 @@ local.properties
 platforms/android/app/src/main/assets/bundle
 platforms/ios/shellular/bundle
 platforms/browser/bundle
+platforms/desktop/bundle
+platforms/desktop/dist
 platforms/android/app/release
 platforms/android/build
 keystore.jks

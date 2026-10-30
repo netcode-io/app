@@ -28,7 +28,7 @@ import { initHapticDelegation } from "lib/haptics";
 		}
 	}
 
-	if (process.env.DEV_MODE) {
+	if (process.env.DEV_MODE && !process.env.IS_DESKTOP) {
 		const eruda = await import("./console");
 		eruda.default.init();
 	}
@@ -42,6 +42,8 @@ import { initHapticDelegation } from "lib/haptics";
 		setup = await import("./platforms/android");
 	} else if (process.env.IS_IOS) {
 		setup = await import("./platforms/ios");
+	} else if (process.env.IS_DESKTOP) {
+		setup = await import("./platforms/desktop");
 	} else if (process.env.IS_BROWSER) {
 		setup = await import("./platforms/browser");
 	}

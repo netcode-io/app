@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Browser</title>
+		<style>
+			:root {
+				color-scheme: dark;
+				--primary: #0d0d0f;
+				--primary-text: #f5f1e8;
+				--accent: #d6c2a1;
+				--secondary: #1b1b1f;
+			}
+			* { box-sizing: border-box; }
+			html, body {
+				margin: 0;
+				height: 100%;
+				background: var(--primary);
+				color: var(--primary-text);
+				font: 13px/1.2 "Segoe UI", Roboto, sans-serif;
+			}
+			form {
+				height: 100%;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				padding: 8px 10px;
+				background: var(--secondary);
+				border-bottom: 1px solid rgba(214, 194, 161, 0.18);
+			}
+			button {
+				height: 32px;
+				min-width: 32px;
+				padding: 0 8px;
+				border: 0;
+				border-radius: 8px;
+				background: transparent;
+				color: var(--primary-text);
+				cursor: pointer;
+			}
+			button:hover { background: rgba(214, 194, 161, 0.14); }
+			button:disabled { opacity: 0.35; cursor: default; }
+			input {
+				flex: 1;
+				height: 32px;
+				border: 1px solid rgba(214, 194, 161, 0.28);
+				border-radius: 999px;
+				padding: 0 14px;
+				background: var(--primary);
+				color: var(--primary-text);
+				outline: none;
+			}
+			input:focus { border-color: var(--accent); }
+		</style>
+	</head>
+	<body>
+		<form id="bar">
+			<button id="back" type="button" aria-label="Back" disabled>←</button>
+			<button id="forward" type="button" aria-label="Forward" disabled>→</button>
+			<button id="reload" type="button" aria-label="Reload">↻</button>
+			<button id="home" type="button" aria-label="Home">⌂</button>
+			<input id="url" type="text" spellcheck="false" aria-label="Address" placeholder="Search or enter a URL" />
+			<button id="external" type="button" aria-label="Open in system browser">↗</button>
+			<button id="devtools" type="button" aria-label="Developer tools">{ }</button>
+		</form>
+		<script>
+			const back = document.getElementById("back");
+			const forward = document.getElementById("forward");
+			const url = document.getElementById("url");
+			const chrome = window.browserChrome;
+
+			document.getElementById("bar").addEventListener("submit", (event) => {
+				event.preventDefault();
+				chrome.command("navigate", url.value);
+			});
+			back.addEventListener("click", () => chrome.command("back"));
+			forward.addEventListener("click", () => chrome.command("forward"));
+			document.getElementById("reload").addEventListener("click", () => {
+				const button = document.getElementById("reload");
+				chrome.command(button.getAttribute("aria-label") === "Stop" ? "stop" : "reload");
+			});
+			document.getElementById("home").addEventListener("click", () => chrome.command("home"));
+			document.getElementById("external").addEventListener("click", () => chrome.command("external"));
+			document.getElementById("devtools").addEventListener("click", () => chrome.command("devtools"));
+			url.addEventListener("focus", () => url.select());
+
+			chrome.onState((state) => {
+				if (document.activeElement !== url) {
+					url.value = state.url && state.url.startsWith("shellular://") ? "" : state.url || "";
+				}
+				back.disabled = !state.canGoBack;
+				forward.disabled = !state.canGoForward;
+				document.getElementById("reload").textContent = state.loading ? "×" : "↻";
+				document.getElementById("reload").setAttribute("aria-label", state.loading ? "Stop" : "Reload");
+			});
+			chrome.onTheme((theme) => {
+				const root = document.documentElement;
+				if (theme.primary) root.style.setProperty("--primary", theme.primary);
+				if (theme.primaryText) root.style.setProperty("--primary-text", theme.primaryText);
+				if (theme.accent) root.style.setProperty("--accent", theme.accent);
+				if (theme.secondary) root.style.setProperty("--secondary", theme.secondary);
+			});
+			window.addEventListener("keydown", (event) => {
+				if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "l") {
+					event.preventDefault();
+					url.focus();
+				}
+			});
+			chrome.command("refresh");
+		</script>
+	</body>
+</html>
